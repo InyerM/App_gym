@@ -1,0 +1,132 @@
+﻿<Page x:Class="App_Gym.Paginas.Menus.Credits"
+      xmlns:ctls="clr-namespace:App_Gym.Controls" 
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:App_Gym.Paginas.Menus"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      SizeChanged="Page_SizeChanged"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Credits">
+
+    <materialDesign:DialogHost CloseOnClickAway="True" DialogTheme="Dark" Identifier="dialog">
+        <materialDesign:DialogHost.DialogContent>
+            <Grid Width="450" Height="200">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Path Data="{DynamicResource info}" Fill="{DynamicResource TextSecundaryColor}" Grid.Column="0" Stretch="Uniform" Margin="20"/>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Información del crédito" FontFamily="Trebuchet MS" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextSecundaryColor}"
+                           HorizontalAlignment="Left" Width="Auto" FontStyle="Normal" Height="Auto" Margin="20 20"/>
+                    <TextBlock x:Name="txtInfoCliente" Margin="20 10" Foreground="{DynamicResource TextSecundaryColor}" FontSize="13" FontFamily="Trebuchet MS"/>
+                    <Button Margin="20 10" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Style="{DynamicResource ButtonAcept}" Tag="Aceptar" Width="100" Height="40" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
+        <Border CornerRadius="5" Background="{DynamicResource SecundaryBackgroundColor}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <Grid Grid.Column="0" HorizontalAlignment="Stretch" Margin="0 15 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+                        <ctls:textfieldSearch x:Name="txtSearch" Hint="Buscar" Icon="{DynamicResource search}" IconWidth="15"  Margin="10"/>
+                        <Button x:Name="btnSearch" Style="{DynamicResource ButtonEdit}" Content="{DynamicResource sent}" Grid.Column="1" Click="btnSearch_Click" HorizontalAlignment="Left" Margin="0 0 0 0"/>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Grid.Column="4" Grid.Row="0" Margin="1 10 0 0">
+                        <Button x:Name="btnReset" Style="{DynamicResource ButtonEdit}" Content="{DynamicResource reset}" Grid.Column="4" Click="btnReset_Click" HorizontalAlignment="Left" Margin="10 0 0 0"/>
+                        <Button x:Name="btnDel" Style="{DynamicResource ButtonEdit}" Content="{DynamicResource delete}" Grid.Column="4" Click="btnDel_Click" HorizontalAlignment="Left" Margin="10 0 0 0"/>
+                        <Button x:Name="btnDeuda" Style="{DynamicResource ButtonEdit}" Content="{DynamicResource info}" Grid.Column="4" Click="btnDeuda_Click" HorizontalAlignment="Left" Margin="10 0 0 0" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
+                    </StackPanel>
+
+                    <Grid Margin="10 30 10 10" Grid.Column="0" HorizontalAlignment="Stretch" Width="Auto" Height="Auto">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid x:Name="gd" Grid.Row="0" VerticalAlignment="Top" Height="400">
+                            <ListView x:Name="lvCredits" HorizontalAlignment="Stretch" AlternationCount="-6" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False" materialDesign:ThemeAssist.Theme="Dark">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="False" >
+                                        <GridView.Columns>
+                                            <GridViewColumn Width="80">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding CodigoCredito}" Style="{DynamicResource CeilStyle}" Margin="18 0 0 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="Id" Style="{DynamicResource CeilStyle}" FontWeight="Bold"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.HeaderTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="230">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding NombreCliente}" Style="{DynamicResource CeilStyle}" Margin="18 0 0 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="Nombre Cliente" Style="{DynamicResource CeilStyle}" FontWeight="Bold"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.HeaderTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="200">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding NombreArticulo}" Style="{DynamicResource CeilStyle}" Margin="18 0 0 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="Nombre Artículo" Style="{DynamicResource CeilStyle}" FontWeight="Bold"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.HeaderTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="185">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Fecha}" Style="{DynamicResource CeilStyle}" Margin="18 0 0 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="Fecha de compra" Style="{DynamicResource CeilStyle}" FontWeight="Bold"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.HeaderTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="120">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Deuda}" Style="{DynamicResource CeilStyle}" Margin="18 0 0 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="Deuda" Style="{DynamicResource CeilStyle}" FontWeight="Bold" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.HeaderTemplate>
+                                            </GridViewColumn>
+                                        </GridView.Columns>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </materialDesign:DialogHost>
+</Page>

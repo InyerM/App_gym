@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="App_Gym.Controls.textfieldSearch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:App_Gym.Controls"
+             mc:Ignorable="d" Name="txtField">
+
+    <UserControl.Resources>
+
+        <Style x:Key="MenuIconStyle" TargetType="{x:Type Path}">
+            <Setter Property="Fill" Value="{DynamicResource SecundaryIconColor}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TextBox}}" Value="True">
+                    <Setter Property="Fill" Value="{DynamicResource TextSecundaryColor}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsFocused, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TextBox}}" Value="True">
+                    <Setter Property="Fill" Value="{DynamicResource PrimaryTextColor}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <Style x:Key="TextFieldStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Background" Value="{DynamicResource TertiaryBackgroundColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextFourthColor}"/>
+            <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Cursor" Value="IBeam"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="Padding" Value="10 0 0 0"/>
+            <Setter Property="TextElement.FontSize" Value="14"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="txtBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                SnapsToDevicePixels="True">
+                            <Grid Margin="{TemplateBinding Padding}">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <ScrollViewer
+                                    x:Name="PART_ContentHost"
+                                    Focusable="False"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    VerticalScrollBarVisibility="Hidden"
+                                    />
+                                <Label x:Name="WaterMarkerLabel"
+                                       Content="{TemplateBinding Tag}"
+                                       FontWeight="Regular"
+                                       FontSize="14"
+                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       Visibility="Collapsed"
+                                       Foreground="{DynamicResource TextSecundaryColor}"
+                                       Padding="1 0 0 0"/>
+
+                                <Path Grid.Column="1" Data="{Binding Icon, ElementName=txtField, FallbackValue={StaticResource DefaultIcon}, TargetNullValue={StaticResource DefaultIcon}}" Margin="{Binding IconMargin, FallbackValue='0,0,10,0', TargetNullValue='0,0,10,0'}"
+                                  Stretch="Uniform" Width="{Binding IconWidth, ElementName=txtField, FallbackValue=15,TargetNullValue=15}" Style="{StaticResource MenuIconStyle}"/>
+
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value=""/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Visibility" Value="Visible"
+                                        TargetName="WaterMarkerLabel"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                        
+                    </ControlTemplate>
+                </Setter.Value>
+                
+            </Setter>
+
+
+
+        </Style>
+        
+    </UserControl.Resources>
+
+    <TextBox x:Name="textBox" Style="{DynamicResource TextFieldStyle}" Tag="{Binding Hint, ElementName=txtField, FallbackValue=MenuText, TargetNullValue=MenuText}"  Cursor="IBeam" HorizontalAlignment="Stretch" />
+</UserControl>
