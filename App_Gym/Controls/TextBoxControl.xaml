@@ -75,5 +75,5 @@
 
     </UserControl.Resources>
 
-    <TextBox x:Name="textBox" Style="{DynamicResource TextFieldStyle}" Tag="{Binding Hint, ElementName=txtBox, FallbackValue=MenuText, TargetNullValue=MenuText}"  Cursor="IBeam" HorizontalAlignment="Stretch" />
+    <TextBox x:Name="textBox" Style="{DynamicResource TextFieldStyle}" Tag="{Binding Hint, ElementName=txtBox, FallbackValue=MenuText, TargetNullValue=MenuText}"  Cursor="IBeam" HorizontalAlignment="Stretch"/>
 </UserControl>

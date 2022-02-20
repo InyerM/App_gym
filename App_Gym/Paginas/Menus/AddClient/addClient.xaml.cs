@@ -27,34 +27,39 @@ namespace App_Gym.Paginas.Menus.AddClient
 
             MainWindow.previous_page = MainWindow.actual_page;
             MainWindow.actual_page = new Uri("Paginas/Menus/AddClient/addClient.xaml", UriKind.RelativeOrAbsolute);
+            cargar();
 
         }
         public List<string> values = new List<string>();
-        public Conexion con = new Conexion();
+        public CD con = new CD();
+
+        public void cargar()
+        {
+            if (Clients.selection == "edit")
+            {
+                txtIdentificacion.Text = Clients.items[0];
+                txtNombre.Text = Clients.items[1];
+                txtTelefono.Text = Clients.items[2];
+                txtOcupacion.Text = Clients.items[3];
+            }
+        }
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
 
 
-            try
+            if (txtNombre.Text == "" || txtIdentificacion.Text == "" || txtOcupacion.Text == "" || txtTelefono.Text == "") 
             {
-                TextBox txt = txtIdentificacion.Content as TextBox;
-                values.Add(txt.Text);
-                txt = txtNombre.Content as TextBox;
-                values.Add(txt.Text);
-                txt = txtTelefono.Content as TextBox;
-                values.Add(txt.Text);
-                txt = txtOcupacion.Content as TextBox;
-                values.Add(txt.Text);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al insertar " + ex.Message);
-                NavigationService.Navigate(new System.Uri("Paginas/Menus/Clients.xaml", UriKind.RelativeOrAbsolute));
+                MessageBox.Show("Error al insertar, hay algunos espacios vacios");
                 return;
             }
-
+            else
+            {
+                values.Add(txtIdentificacion.Text);
+                values.Add(txtNombre.Text);
+                values.Add(txtTelefono.Text);
+                values.Add(txtOcupacion.Text);
+            }
 
             if(Clients.selection == "edit")
             {

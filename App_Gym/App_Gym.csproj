@@ -36,6 +36,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>gym.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=2.0.4.3, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.0.4\lib\net452\MaterialDesignColors.dll</HintPath>
@@ -109,8 +113,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Clases\Articulos.cs" />
+    <Compile Include="Clases\CD.cs" />
     <Compile Include="Clases\Clientes.cs" />
     <Compile Include="Clases\Compras.cs" />
+    <Compile Include="Clases\ConectionServer.cs" />
     <Compile Include="Clases\Conexion.cs" />
     <Compile Include="Clases\Creditos.cs" />
     <Compile Include="Clases\Mensualidades.cs" />
@@ -220,6 +226,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="gym.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.3.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.3.0\build\MaterialDesignThemes.targets')" />

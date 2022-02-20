@@ -27,12 +27,25 @@ namespace App_Gym.Paginas.Menus.AddClient
             InitializeComponent();
             MainWindow.previous_page = MainWindow.actual_page;
             MainWindow.actual_page = new Uri("Paginas/Menus/AddClient/addPayment.xaml", UriKind.RelativeOrAbsolute);
+            cargar();
 
         }
 
+
+        public void cargar()
+        {
+            if (Payments.selection == "edit")
+            {
+                txtCedula.Text = Payments.items[0];
+                txtIdArticulo.Text = Payments.items[1];
+                dateCompra.Text = Payments.items[2];
+            }
+        }
+
+
         public List<string> values = new List<string>();
         public List<string> items = new List<string>();
-        public Conexion con = new Conexion();
+        public CD con = new CD();
         string idArticulo;
         double costo;
         double deuda;
@@ -42,20 +55,16 @@ namespace App_Gym.Paginas.Menus.AddClient
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (txtCedula.Text == "" || txtIdArticulo.Text == "" || dateCompra.Text == "")
             {
-
-                TextBox txt = txtCedula.Content as TextBox;
-                values.Add(txt.Text);
-                txt = txtIdArticulo.Content as TextBox;
-                values.Add(txt.Text);
-                values.Add(dateCompra.Text);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al insertar " + ex.Message);
-                NavigationService.Navigate(new System.Uri("Paginas/Menus/Payments.xaml", UriKind.RelativeOrAbsolute));
+                MessageBox.Show("Error al insertar, hay algunos espacios vacios");
                 return;
+            }
+            else
+            {
+                values.Add(txtCedula.Text);
+                values.Add(txtIdArticulo.Text);
+                values.Add(dateCompra.Text);
             }
 
             if (Payments.selection == "edit")
@@ -105,12 +114,10 @@ namespace App_Gym.Paginas.Menus.AddClient
 
         private void btnDialogAceptar_Click(object sender, RoutedEventArgs e)
         {
-            TextBox txt = txtIdArticulo.Content as TextBox;
-            idArticulo = txt.Text;
-
+            idArticulo = txtIdArticulo.Text;
+            items.Clear();
             try
             {
-                
                 costo = con.p_query("SELECT PRECIO FROM ARTICULO WHERE ID =  " + idArticulo);
                 deuda = costo - double.Parse(txtAbono.Text);
                 txtDeuda.Text = "La deuda es de: " + (deuda);

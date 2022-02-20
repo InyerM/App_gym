@@ -37,7 +37,9 @@ namespace App_Gym.Paginas.Menus
 
         public static List<Articulos> lista_suplementos { get; set; } = new List<Articulos>();
 
-        public Conexion con = new Conexion();
+        public CD con = new CD();
+
+        public static List<string> items { get; set; } = new List<string>();
         public static int sel { get; set; }
 
         public static double idSelected { get; set; }
@@ -61,6 +63,7 @@ namespace App_Gym.Paginas.Menus
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             selection = "edit";
+            items.Clear();
 
             sel = lvSupplements.SelectedIndex;
             if (sel == -1)
@@ -69,6 +72,9 @@ namespace App_Gym.Paginas.Menus
             }
             else
             {
+                items.Add(lista_suplementos[sel].ArticulosNombre);
+                items.Add(lista_suplementos[sel].ArticulosPrecio.ToString());
+                items.Add(lista_suplementos[sel].ArticulosSubtipo);
                 idSelected = lista_suplementos[sel].ArticulosId;
                 NavigationService.Navigate(new System.Uri("Paginas/Menus/AddClient/addSupplement.xaml", UriKind.RelativeOrAbsolute));
             }
@@ -128,27 +134,12 @@ namespace App_Gym.Paginas.Menus
             }
         }
 
-        Regex rgx;
-        MatchCollection mtch;
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             TextBox txt = txtSearch.Content as TextBox;
             string busqueda = txt.Text;
-
-            string p_cedula = @"\d";
-            string q;
-
-            rgx = new Regex(p_cedula);
-            mtch = rgx.Matches(busqueda);
-
-            if (mtch.Count > 0)
-            {
-                q = "SELECT * FROM ARTICULO WHERE ID LIKE '%" + busqueda + "%' AND TIPO = 'SUPLEMENTOS'";
-            }
-            else
-            {
-                q = "SELECT * FROM ARTICULO WHERE NOMBRE LIKE '%" + busqueda + "%' AND TIPO = 'SUPLEMENTOS'";
-            }
+            
+            string q = "SELECT * FROM ARTICULO WHERE (NOMBRE LIKE '%" + busqueda + "%' OR ID LIKE '%" + busqueda + "%' OR PRECIO LIKE '%" + busqueda + "%' OR SUBTIPO LIKE '%" + busqueda + "%') AND TIPO = 'SUPLEMENTOS'";
 
             con.s_query("suplementos", q);
             lista_suplementos = con.l_s;

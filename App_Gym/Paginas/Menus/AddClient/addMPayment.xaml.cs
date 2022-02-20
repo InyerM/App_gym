@@ -26,30 +26,39 @@ namespace App_Gym.Paginas.Menus.AddClient
             InitializeComponent();
             MainWindow.previous_page = MainWindow.actual_page;
             MainWindow.actual_page = new Uri("Paginas/Menus/AddClient/addMPayment.xaml", UriKind.RelativeOrAbsolute);
+            cargar();
 
         }
 
+        public void cargar()
+        {
+            if (MPayment.selection == "edit")
+            {
+                txtId.Text = MPayment.items[0];
+                txtCosto.Text = MPayment.items[1];
+                dateInicio.Text = MPayment.items[2];
+                dateFin.Text = MPayment.items[3];
+            }
+        }
+
         public List<string> values = new List<string>();
-        public Conexion con = new Conexion();
+        public CD con = new CD();
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
 
-            try
+            if (txtCosto.Text == "" || txtId.Text == "" || dateInicio.Text == "" || dateFin.Text == "")
+            {
+                MessageBox.Show("Error al insertar, hay algunos espacios vacios");
+                return;
+            }
+            else
             {
                 values.Add(dateInicio.Text);
                 values.Add(dateFin.Text); 
-                TextBox txt = txtCosto.Content as TextBox;
-                values.Add(txt.Text);
-                txt = txtId.Content as TextBox;
-                values.Add(txt.Text);
+                values.Add(txtCosto.Text);
+                values.Add(txtId.Text);
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al insertar " + ex.Message);
-                NavigationService.Navigate(new System.Uri("Paginas/Menus/MPayment.xaml", UriKind.RelativeOrAbsolute));
-                return;
             }
 
 

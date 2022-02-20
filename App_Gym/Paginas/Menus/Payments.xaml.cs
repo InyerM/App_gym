@@ -36,8 +36,10 @@ namespace App_Gym.Paginas.Menus
         }
 
 
-        public Conexion con = new Conexion();
+        public CD con = new CD();
         public static List<Compras> lista_compras { get; set; } = new List<Compras>();
+
+        public static List<string> items { get; set; } = new List<string>();
         public static int sel { get; set; }
 
         public static double idSelected { get; set; }
@@ -60,6 +62,7 @@ namespace App_Gym.Paginas.Menus
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             selection = "edit";
+            items.Clear();
 
             sel = lvPayments.SelectedIndex;
             if (sel == -1)
@@ -68,6 +71,9 @@ namespace App_Gym.Paginas.Menus
             }
             else
             {
+                items.Add(lista_compras[sel].Cedula.ToString());
+                items.Add(lista_compras[sel].IdArticulo.ToString());
+                items.Add(lista_compras[sel].Fecha.ToString());
                 idSelected = lista_compras[sel].CodigoCompra;
                 NavigationService.Navigate(new System.Uri("Paginas/Menus/AddClient/addPayment.xaml", UriKind.RelativeOrAbsolute));
             }
@@ -127,35 +133,16 @@ namespace App_Gym.Paginas.Menus
             }
         }
 
-        Regex rgx;
-        MatchCollection mtch;
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             TextBox txt = txtSearch.Content as TextBox;
             string busqueda = txt.Text;
 
-            string p_cedula = @"\d";
-            string q;
-
-            rgx = new Regex(p_cedula);
-            mtch = rgx.Matches(busqueda);
-
-            if (mtch.Count > 0)
-            {
-                q = "SELECT C.CEDULA, C.ID, TO_DATE(C.FECHA, 'DD/MM/YY'), C.CODIGO_COMPRA, CL.NOMBRE, A.NOMBRE, A.PRECIO "
+            string q = "SELECT C.CEDULA, C.ID, TO_DATE(C.FECHA, 'DD/MM/YY'), C.CODIGO_COMPRA, CL.NOMBRE, A.NOMBRE, A.PRECIO "
                         + "FROM CLIENTE CL "
                         + "INNER JOIN COMPRAS C ON CL.CEDULA = C.CEDULA "
-                        + "INNER JOIN ARTICULO A ON C.ID = A.ID WHERE CODIGO_COMPRA LIKE '%" + busqueda + "%' "
+                        + "INNER JOIN ARTICULO A ON C.ID = A.ID WHERE CL.NOMBRE LIKE '%" + busqueda + "%' OR C.CODIGO_COMPRA LIKE '%" + busqueda + "%' OR A.NOMBRE LIKE '%" + busqueda + "%' OR C.FECHA LIKE '%" + busqueda + "%' OR A.PRECIO LIKE '%" + busqueda + "%' "
                         + "ORDER BY CODIGO_COMPRA DESC";
-            }
-            else
-            {
-                q = "SELECT C.CEDULA, C.ID, TO_DATE(C.FECHA, 'DD/MM/YY'), C.CODIGO_COMPRA, CL.NOMBRE, A.NOMBRE, A.PRECIO "
-                        + "FROM CLIENTE CL "
-                        + "INNER JOIN COMPRAS C ON CL.CEDULA = C.CEDULA "
-                        + "INNER JOIN ARTICULO A ON C.ID = A.ID WHERE CL.NOMBRE LIKE '%" + busqueda + "%' "
-                        + "ORDER BY CODIGO_COMPRA DESC";
-            }
 
             con.s_query("compras", q);
             lista_compras = con.l_p;

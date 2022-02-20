@@ -45,24 +45,24 @@
 
                     <Border CornerRadius="10" Margin="120 30 120 20" Height="350" VerticalAlignment="Top" Background="{DynamicResource BackgroundFourthColor}">
                         <StackPanel>
-                            <Grid HorizontalAlignment="Stretch" Margin="50 30 50 0">
+                            <Grid HorizontalAlignment="Stretch" Margin="50 30 50 0" Height="32">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Path Grid.Column="0" Data="{DynamicResource idPerson}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 5 0 0"
                                             Stretch="Uniform" Width="25" Style="{DynamicResource IconStyle}"/>
-                                <ctls:TextBoxControl Grid.Column="1" x:Name="txtCedula" Hint="Ingrese la identificación de la persona" Icon="{DynamicResource search}" IconWidth="0"/>
+                                <TextBox Grid.Column="1" x:Name="txtCedula" materialDesign:HintAssist.Hint="Ingrese la identificación de la persona" Foreground="{DynamicResource TextSecundaryColor}" Cursor="IBeam" BorderBrush="{DynamicResource TextSecundaryColor}" Padding="15 9 0 0" FontSize="13"></TextBox>
                             </Grid>
 
-                            <Grid HorizontalAlignment="Stretch" Margin="50 30 50 0">
+                            <Grid HorizontalAlignment="Stretch" Margin="50 30 50 0" Height="32">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Path Grid.Column="0" Data="{DynamicResource article}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 5 0 0"
                                             Stretch="Uniform" Width="25" Style="{DynamicResource IconStyle}"/>
-                                <ctls:TextBoxControl Grid.Column="1" x:Name="txtIdArticulo" Hint="Ingrese el id del artículo" Icon="{DynamicResource search}" IconWidth="0"/>
+                                <TextBox Grid.Column="1" x:Name="txtIdArticulo" materialDesign:HintAssist.Hint="Ingrese la id del artículo" Foreground="{DynamicResource TextSecundaryColor}" Cursor="IBeam" BorderBrush="{DynamicResource TextSecundaryColor}" Padding="15 9 0 0" FontSize="13"></TextBox>
                             </Grid>
                             <Grid HorizontalAlignment="Stretch" Margin="50 30 50 0">
                                 <Grid.ColumnDefinitions>
@@ -77,7 +77,7 @@
                                             Width="Auto"
                                             HorizontalAlignment="Stretch"
                                             materialDesign:HintAssist.Hint="Fecha de compra"
-                                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Foreground="{DynamicResource TextSecundaryColor}" Padding="10 0 0 8" FontWeight="Regular" FontSize="14"
+                                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Foreground="{DynamicResource TextSecundaryColor}" Padding="15 0 0 8" FontWeight="Regular" FontSize="14"
                                             BorderBrush="{DynamicResource TextSecundaryColor}"
                                             />
                             </Grid>

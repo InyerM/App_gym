@@ -36,9 +36,10 @@ namespace App_Gym.Paginas.Menus
 
 
         public static List<Creditos> lista_creditos { get; set; } = new List<Creditos>();
-        public Conexion con = new Conexion();
+        public CD con = new CD();
         public static int sel { get; set; }
 
+        public static double idSelected { get; set; }
         public static string selection { get; set; }
 
         public static int sizeChanged { get; set; } = 1;
@@ -52,7 +53,7 @@ namespace App_Gym.Paginas.Menus
 
             if (sel == -1)
             {
-                MessageBox.Show("Error, no se ha seleccionado ninguna fila");
+                txtInfoCliente.Text = "Error: seleccione por favor una fila\n\n\n";
             }
             else
             {
@@ -73,8 +74,16 @@ namespace App_Gym.Paginas.Menus
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
+            refresh();
+        }
+
+        private void refresh()
+        {
+            con.select("creditos");
+            lista_creditos = con.l_cre;
             lvCredits.ItemsSource = null;
             lvCredits.ItemsSource = lista_creditos;
+            NavigationService.Refresh();
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)
@@ -87,12 +96,11 @@ namespace App_Gym.Paginas.Menus
             }
             else
             {
-                lista_creditos.RemoveAt(sel);
-                MessageBox.Show("Se ha eliminado el artículo correctamente");
+                idSelected = lista_creditos[sel].CodigoCredito;
+                con.delete("creditos", idSelected);
             }
 
-            lvCredits.ItemsSource = null;
-            lvCredits.ItemsSource = lista_creditos;
+            refresh();
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -121,33 +129,15 @@ namespace App_Gym.Paginas.Menus
             }
         }
 
-        Regex rgx;
-        MatchCollection mtch;
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             TextBox txt = txtSearch.Content as TextBox;
             string busqueda = txt.Text;
 
-            string p_cedula = @"\d";
-            string q;
-
-            rgx = new Regex(p_cedula);
-            mtch = rgx.Matches(busqueda);
-
-            if (mtch.Count > 0)
-            {
-                q = "SELECT        CL.CEDULA, A.ID, TO_DATE(C.FECHA, 'DD/MM/YY'), C.CODIGO_COMPRA, CL.NOMBRE, A.NOMBRE, A.PRECIO, CRE.CODIGO_CREDITO, CRE.DEUDA "
-                        + "FROM            ARTICULO A, COMPRAS C, CLIENTE CL, CREDITOS CRE "
-                        + "WHERE        A.ID = C.ID AND CL.CEDULA = C.CEDULA AND CRE.ID = C.CODIGO_COMPRA AND C.CODIGO_CREDITO LIKE '%" + busqueda + "%' "
+            string q = "SELECT CL.CEDULA, A.ID, convert(datetime, C.FECHA, 5), C.CODIGO_COMPRA, CL.NOMBRE, A.NOMBRE, A.PRECIO, CRE.CODIGO_CREDITO, CRE.DEUDA "
+                        + "FROM ARTICULO A, COMPRAS C, CLIENTE CL, CREDITOS CRE "
+                        + "WHERE A.ID = C.ID AND CL.CEDULA = C.CEDULA AND CRE.ID = C.CODIGO_COMPRA AND (CRE.CODIGO_CREDITO LIKE '%" + busqueda + "%' OR CL.NOMBRE LIKE '%" + busqueda + "%' OR C.FECHA LIKE '%" + busqueda + "%' OR A.NOMBRE LIKE '%" + busqueda + "%' OR CRE.DEUDA LIKE '%" + busqueda + "%') "
                         + "ORDER BY CRE.CODIGO_CREDITO DESC";
-            }
-            else
-            {
-                q = "SELECT        CL.CEDULA, A.ID, TO_DATE(C.FECHA, 'DD/MM/YY'), C.CODIGO_COMPRA, CL.NOMBRE, A.NOMBRE, A.PRECIO, CRE.CODIGO_CREDITO, CRE.DEUDA "
-                        + "FROM            ARTICULO A, COMPRAS C, CLIENTE CL, CREDITOS CRE "
-                        + "WHERE        A.ID = C.ID AND CL.CEDULA = C.CEDULA AND CRE.ID = C.CODIGO_COMPRA AND CL.NOMBRE LIKE '%" + busqueda + "%' "
-                        + "ORDER BY CRE.CODIGO_CREDITO DESC";
-            }
 
             con.s_query("creditos", q);
             lista_creditos = con.l_cre;

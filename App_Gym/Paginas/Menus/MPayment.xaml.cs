@@ -36,8 +36,10 @@ namespace App_Gym.Paginas.Menus
 
         public static List<Mensualidades> lista_m { get; set; } = new List<Mensualidades>();
 
-        public Conexion con = new Conexion();
+        public CD con = new CD();
         public static int sel { get; set; }
+
+        public static List<string> items { get; set; } = new List<string>();
 
         public static double idSelected { get; set; }
 
@@ -61,6 +63,7 @@ namespace App_Gym.Paginas.Menus
         {
             selection = "edit";
 
+            items.Clear();
             sel = lvMPayments.SelectedIndex;
             if (sel == -1)
             {
@@ -69,6 +72,11 @@ namespace App_Gym.Paginas.Menus
             else
             {
                 idSelected = lista_m[sel].NroRegistro;
+                items.Add(lista_m[sel].Cedula.ToString());
+                items.Add(lista_m[sel].Costo.ToString());
+                items.Add(lista_m[sel].FechaInicio.ToString());
+                items.Add(lista_m[sel].FechaFin.ToString());
+
                 NavigationService.Navigate(new System.Uri("Paginas/Menus/AddClient/addMPayment.xaml", UriKind.RelativeOrAbsolute));
             }
         }
@@ -126,32 +134,14 @@ namespace App_Gym.Paginas.Menus
                 sizeChanged = 1;
             }
         }
-
-        Regex rgx;
-        MatchCollection mtch;
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             TextBox txt = txtSearch.Content as TextBox;
             string busqueda = txt.Text;
 
-            string p_cedula = @"\d";
-            string q;
-
-            rgx = new Regex(p_cedula);
-            mtch = rgx.Matches(busqueda);
-
-            if (mtch.Count > 0)
-            {
-                q = "SELECT CL.CEDULA, CL.NOMBRE, M.NROREGISTRO, TO_DATE(M.FECHA_INICIO, 'DD/MM/YY'), TO_DATE(M.FECHA_FIN, 'DD/MM/YY'), M.COSTO "
-                        + "FROM MENSUALIDAD M INNER JOIN CLIENTE CL ON CL.CEDULA = M.CEDULA WHERE M.NROREGISTRO LIKE '%" + busqueda + "%' "
+            string q = "SELECT CL.CEDULA, CL.NOMBRE, M.NROREGISTRO, convert(datetime, M.FECHA_INICIO, 5), convert(datetime, M.FECHA_FIN, 5), M.COSTO "
+                        + "FROM MENSUALIDAD M INNER JOIN CLIENTE CL ON CL.CEDULA = M.CEDULA WHERE M.NROREGISTRO LIKE '%" + busqueda + "%' OR CL.NOMBRE LIKE '%" + busqueda + "%' OR CL.CEDULA LIKE '%" + busqueda + "%' OR M.FECHA_INICIO LIKE '%" + busqueda + "%' OR M.FECHA_FIN LIKE '%" + busqueda + "%' OR M.COSTO LIKE '%" + busqueda + "%' "
                         + "ORDER BY NROREGISTRO DESC ";
-            }
-            else
-            {
-                q = "SELECT CL.CEDULA, CL.NOMBRE, M.NROREGISTRO, TO_DATE(M.FECHA_INICIO, 'DD/MM/YY'), TO_DATE(M.FECHA_FIN, 'DD/MM/YY'), M.COSTO "
-                        + "FROM MENSUALIDAD M INNER JOIN CLIENTE CL ON CL.CEDULA = M.CEDULA WHERE CL.NOMBRE LIKE '%" + busqueda + "%' "
-                        + "ORDER BY NROREGISTRO DESC ";
-            }
 
             con.s_query("mensualidades", q);
             lista_m = con.l_m;

@@ -36,10 +36,11 @@ namespace App_Gym.Paginas.Menus
             lvArticles.ItemsSource = lista_articulos;
         }
 
-        public Conexion con = new Conexion();
+        public CD con = new CD();
         public static List<Articulos> lista_articulos { get; set; } = new List<Articulos>();
         public static int sel { get; set; }
 
+        public static List<string> items { get; set; } = new List<string>();
         public static double idSelected { get; set; }
         public static string selection { get; set; }
 
@@ -60,6 +61,7 @@ namespace App_Gym.Paginas.Menus
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             selection = "edit";
+            items.Clear();
 
             sel = lvArticles.SelectedIndex;
             if (sel == -1)
@@ -68,6 +70,10 @@ namespace App_Gym.Paginas.Menus
             }
             else
             {
+
+                items.Add(lista_articulos[sel].ArticulosNombre);
+                items.Add(lista_articulos[sel].ArticulosPrecio.ToString());
+                items.Add(lista_articulos[sel].ArticulosSubtipo);
                 idSelected = lista_articulos[sel].ArticulosId;
                 NavigationService.Navigate(new System.Uri("Paginas/Menus/AddClient/addArticle.xaml", UriKind.RelativeOrAbsolute));
             }
@@ -127,27 +133,13 @@ namespace App_Gym.Paginas.Menus
             }
         }
 
-        Regex rgx;
-        MatchCollection mtch;
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             TextBox txt = txtSearch.Content as TextBox;
             string busqueda = txt.Text;
 
-            string p_cedula = @"\d";
-            string q;
+            string q = "SELECT * FROM ARTICULO WHERE NOMBRE LIKE '%" + busqueda + "%' OR ID LIKE '%" + busqueda + "%' OR PRECIO LIKE '%" + busqueda + "%' OR SUBTIPO LIKE '%" + busqueda + "%' AND TIPO = 'ROPA'";
 
-            rgx = new Regex(p_cedula);
-            mtch = rgx.Matches(busqueda);
-
-            if (mtch.Count > 0)
-            {
-                q = "SELECT * FROM ARTICULO WHERE ID LIKE '%" + busqueda + "%' AND TIPO = 'ROPA'";
-            }
-            else
-            {
-                q = "SELECT * FROM ARTICULO WHERE NOMBRE LIKE '%" + busqueda + "%' AND TIPO = 'ROPA'";
-            }
 
             con.s_query("articulos", q);
             lista_articulos = con.l_a;

@@ -38,8 +38,10 @@ namespace App_Gym.Paginas.Menus
 
         public static List<Clientes> clientes{ get; set; } = new List<Clientes>();
 
-        public Conexion con = new Conexion();
+        public CD con = new CD();
         public static int sel { get; set; }
+
+        public static List<string> items { get; set; } = new List<string>();
 
         public static double idSelected { get; set; }
 
@@ -61,6 +63,7 @@ namespace App_Gym.Paginas.Menus
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             selection = "edit";
+            items.Clear();
 
             sel = lvClients.SelectedIndex;
             
@@ -70,6 +73,10 @@ namespace App_Gym.Paginas.Menus
             }
             else
             {
+                items.Add(clientes[sel].Identificacion.ToString());
+                items.Add(clientes[sel].Nombre);
+                items.Add(clientes[sel].Telefono.ToString());
+                items.Add(clientes[sel].Ocupacion);
                 idSelected = clientes[sel].Identificacion;
                 NavigationService.Navigate(new System.Uri("Paginas/Menus/AddClient/addClient.xaml", UriKind.RelativeOrAbsolute));
             }
@@ -132,27 +139,12 @@ namespace App_Gym.Paginas.Menus
 
         }
 
-        Regex rgx;
-        MatchCollection mtch;
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             TextBox txt = txtSearch.Content as TextBox;
             string busqueda = txt.Text;
 
-            string p_cedula = @"\d";
-            string q;
-
-            rgx = new Regex(p_cedula);
-            mtch = rgx.Matches(busqueda);
-
-            if (mtch.Count > 0)
-            {
-                q = "SELECT * FROM CLIENTE WHERE CEDULA LIKE '%" + busqueda + "%'";
-            }
-            else
-            {
-                q = "SELECT * FROM CLIENTE WHERE NOMBRE LIKE '%" + busqueda + "%'";
-            }
+            string q = "SELECT * FROM CLIENTE WHERE CEDULA LIKE '%" + busqueda + "%' OR NOMBRE LIKE '%" + busqueda + "%' OR TELEFONO LIKE '%" + busqueda + "%' OR OCUPACION LIKE '%" + busqueda + "%'";
 
             con.s_query("clientes", q);
             clientes = con.l_c;

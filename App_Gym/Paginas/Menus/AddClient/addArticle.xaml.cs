@@ -26,29 +26,35 @@ namespace App_Gym.Paginas.Menus.AddClient
             InitializeComponent();
             MainWindow.previous_page = MainWindow.actual_page;
             MainWindow.actual_page = new Uri("Paginas/Menus/AddClient/addArticle.xaml", UriKind.RelativeOrAbsolute);
+            cargar();
         }
 
+
+        public void cargar()
+        {
+            if (Articles.selection == "edit")
+            {
+                txtNombre.Text = Articles.items[0];
+                txtPrecio.Text = Articles.items[1];
+                txtTipo.Text = Articles.items[2];
+            }
+        }   
+        
         public List<string> values = new List<string>();
-        public Conexion con = new Conexion();
+        public CD con = new CD();
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                TextBox txt = txtNombre.Content as TextBox;
-                values.Add(txt.Text);
-                txt = txtPrecio.Content as TextBox;
-                values.Add(txt.Text);
-                values.Add("ROPA");
-                txt = txtTipo.Content as TextBox;
-                values.Add(txt.Text);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al insertar " + ex.Message);
-                NavigationService.Navigate(new System.Uri("Paginas/Menus/Articles.xaml", UriKind.RelativeOrAbsolute));
+            if (txtNombre.Text == "" || txtPrecio.Text == "" || txtTipo.Text == ""){
+                MessageBox.Show("Error al insertar, hay algunos espacios vacios");
                 return;
+            }
+            else
+            {
+                values.Add(txtNombre.Text);
+                values.Add(txtPrecio.Text);
+                values.Add("ROPA");
+                values.Add(txtTipo.Text);
             }
 
 
